@@ -37,6 +37,10 @@ Networking::ConnectionManager *Singleton<Networking::ConnectionManager>::makeIns
 	return new Networking::ConnectionManagerCurl();
 }
 
+// MSVC 14.28 (VS 2019 16.9) bug workaround: force emission of the specialization symbol.
+// Without this, the linker cannot find Singleton<ConnectionManager>::makeInstance().
+template class Singleton<Networking::ConnectionManager>;
+
 } // namespace Common
 
 namespace Networking {
