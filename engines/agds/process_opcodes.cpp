@@ -247,7 +247,7 @@ void Process::restartSample() {
 
 void Process::stopSample() {
 	Common::String name = popString();
-	debug("restartSample %s", name.c_str());
+	debug("stopSample %s", name.c_str());
 	auto sound = _engine->soundManager().findSampleByPhaseVar(name);
 	if (sound) {
 		debug("sample found (%s:%s)", sound->resource.c_str(), sound->filename.c_str());
