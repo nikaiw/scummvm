@@ -73,6 +73,7 @@ private:
 	bool _samplePeriodic;
 	bool _sampleAmbient;
 	int32 _sampleVolume;
+	int32 _samplePan;
 	Common::Point _mousePosition;
 	int _filmSubtitlesResource;
 	AnimationPtr _processAnimation;

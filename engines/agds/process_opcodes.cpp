@@ -171,7 +171,7 @@ void Process::loadSample() {
 	Common::String name = popString();
 	debug("loadSample %s, phaseVar: %s, ambient: %d, volume: %d", name.c_str(), _phaseVar.c_str(), _sampleAmbient, _sampleVolume);
 	bool playNow = _sampleAmbient || !_phaseVarControlled || _phaseVar.empty();
-	int id = _engine->soundManager().play(getName(), name, _engine->loadText(name), _phaseVar, playNow, _sampleVolume, 0, -1, _sampleAmbient);
+	int id = _engine->soundManager().play(getName(), name, _engine->loadText(name), _phaseVar, playNow, _sampleVolume, _samplePan, -1, _sampleAmbient);
 	if (_sampleAmbient)
 		_engine->setAmbientSoundId(id);
 	// original engine sets timer to 24 * bitrate / 44100 / 4
@@ -708,6 +708,7 @@ void Process::resetState() {
 	_samplePeriodic = false;
 	_sampleAmbient = false;
 	_sampleVolume = 100;
+	_samplePan = 0;
 
 	_tileWidth = 16;
 	_tileHeight = 16;
@@ -730,6 +731,8 @@ void Process::setPanAndVolume() {
 	}
 	int volume = pop();
 	debug("setPanAndVolume: pan %d volume %d", pan, volume);
+	_sampleVolume = volume;
+	_samplePan = pan;
 }
 
 void Process::setAnimationLoop() {
