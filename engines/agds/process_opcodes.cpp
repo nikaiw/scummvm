@@ -1329,7 +1329,7 @@ void Process::stub265() {
 
 void Process::stub266() {
 	auto color = popColor();
-	debug("stub265: %08x", color);
+	debug("stub266: %08x", color);
 }
 
 void Process::stub267() {
