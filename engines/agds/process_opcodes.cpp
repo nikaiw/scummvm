@@ -32,7 +32,9 @@
 #include "common/debug.h"
 #include "common/savefile.h"
 #include "common/system.h"
+#include "common/translation.h"
 #include "graphics/managed_surface.h"
+#include "gui/message.h"
 
 namespace AGDS {
 
@@ -893,6 +895,8 @@ void Process::saveGame() {
 	debug("saveGame %d", saveSlot);
 	if (_engine->saveGameState(saveSlot, "").getCode() != Common::kNoError) {
 		warning("failed to save game");
+		GUI::MessageDialog dialog(_("Failed to save the game."));
+		dialog.runModal();
 	}
 	suspend(kExitCodeSaveGame);
 }
