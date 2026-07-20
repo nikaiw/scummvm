@@ -1244,6 +1244,11 @@ Common::Error AGDSEngine::loadGameState(int slot) {
 	loadPatches(*saveFile, db);
 	loadScreen(screenName, ScreenLoadingType::Normal, false);
 
+	// Drop any pending "main" queued by load() so it doesn't override
+	// the screen we just restored on the next tick.
+	_nextScreenName.clear();
+	_nextScreenType = ScreenLoadingType::Normal;
+
 	return Common::kNoError;
 }
 
