@@ -19,6 +19,11 @@
  *
  */
 
+// MSVC 14.28 (VS 2019 16.9) optimizer hangs for many minutes on this TU.
+#if defined(_MSC_VER) && _MSC_VER >= 1920 && _MSC_VER < 1930
+#pragma optimize("", off)
+#endif
+
 #include "scumm/smush/rebel/codec_ra2.h"
 
 #include "common/endian.h"

@@ -19,6 +19,11 @@
  *
  */
 
+// MSVC 14.28 (VS 2019 16.9) optimizer hangs for many minutes on this TU.
+#if defined(_MSC_VER) && _MSC_VER >= 1920 && _MSC_VER < 1930
+#pragma optimize("", off)
+#endif
+
 #include "scumm/smush/rebel/smush_multi_font.h"
 #include "scumm/smush/smush_font.h"
 #include "scumm/smush/smush_player.h"
