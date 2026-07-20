@@ -27,6 +27,8 @@
 #include "agds/process.h"
 #include "agds/systemVariable.h"
 #include "common/debug.h"
+#include "common/system.h"
+#include "graphics/surface.h"
 
 namespace AGDS {
 
@@ -34,9 +36,16 @@ void TextLayout::paint(AGDSEngine &engine, Graphics::Surface &backbuffer) {
 	if (!_valid)
 		return;
 	auto *font = engine.getFont(_fontId);
+	const int margin = 4;
 	for (uint i = 0; i < _lines.size(); ++i) {
 		Line &line = _lines[i];
-		font->drawString(&backbuffer, line.text, line.pos.x, line.pos.y, line.size.x, 0);
+		// Clamp so an edge-anchored line still fits on screen.
+		int x = line.pos.x;
+		if (x + line.size.x > backbuffer.w - margin)
+			x = backbuffer.w - margin - line.size.x;
+		if (x < margin)
+			x = margin;
+		font->drawString(&backbuffer, line.text, x, line.pos.y, line.size.x, 0);
 	}
 }
 
@@ -72,6 +81,14 @@ void TextLayout::layout(AGDSEngine &engine, Process &process, const Common::Stri
 	_lines.clear();
 	int w = 0;
 
+	// Wrap-width: script-provided subtitle_width if positive, else the
+	// widest span centred on pos.x that still fits on screen.
+	int screenW  = g_system ? (int)g_system->getWidth() : 800;
+	int cfgWidth = engine.getSystemVariable("subtitle_width")->getInteger();
+	int roomX    = MIN<int>(pos.x, screenW - pos.x);
+	int wrapWidth = (cfgWidth > 0) ? cfgWidth
+	                                : MAX<int>(64, roomX * 2 - 8);
+
 	Common::Point basePos;
 	size_t begin = 0;
 	while (begin < text.size()) {
@@ -81,22 +98,29 @@ void TextLayout::layout(AGDSEngine &engine, Process &process, const Common::Stri
 		if (end == text.npos)
 			end = text.size();
 
-		Common::String line = text.substr(begin, end - begin);
-		debug("parsed line: %s", line.c_str());
+		Common::String rawLine = text.substr(begin, end - begin);
+		debug("parsed line: %s", rawLine.c_str());
 		begin = end + 1;
-		Common::Point size;
-		size.x = font->getStringWidth(line);
-		size.y = font->getFontHeight();
-		_lines.push_back(Line());
 
-		Line &l = _lines.back();
-		l.pos = basePos;
-		l.text = line;
-		l.size = size;
+		Common::Array<Common::String> sublines;
+		font->wordWrapText(rawLine, wrapWidth, sublines);
+		if (sublines.empty())
+			sublines.push_back(Common::String());
+		for (auto &line : sublines) {
+			Common::Point size;
+			size.x = font->getStringWidth(line);
+			size.y = font->getFontHeight();
+			_lines.push_back(Line());
 
-		basePos.y += size.y;
-		if (size.x > w)
-			w = size.x;
+			Line &l = _lines.back();
+			l.pos = basePos;
+			l.text = line;
+			l.size = size;
+
+			basePos.y += size.y;
+			if (size.x > w)
+				w = size.x;
+		}
 	}
 
 	int dy = -basePos.y / 2;
