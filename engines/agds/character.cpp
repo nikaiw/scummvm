@@ -141,7 +141,14 @@ bool Character::direction(int dir) {
 	if (dir < 0)
 		return false;
 
-	_animationPos = Common::Point();
+	// _animationPos is the visible offset applied on top of _pos while a
+	// scripted "jokes" gesture is playing (set via the pos-arg animate()).
+	// Do NOT reset it here: at the end of a joke this function is invoked
+	// from Character::tick() to reload the base animation, and clearing the
+	// offset in a single frame snaps the character back to _pos -- a visible
+	// jump. Leaving it in place keeps the sprite at the joke's final visible
+	// position; the offset gets replaced (not reset) the next time a real
+	// jokes animate(pos, dir, speed) or a move sets a new value.
 	return animate(dir, 100, false);
 }
 
@@ -213,6 +220,13 @@ bool Character::animate(int direction, int speed, bool jokes) {
 	_animation = animation;
 	_animation->speed(speed);
 	_animation->rewind();
+	// Newly-loaded animations default to scale 1.0. Apply the current
+	// perspective scale here so paint() -- which can run before the next
+	// Character::tick() (e.g. same-frame after an opcode-driven direction
+	// change, or a joke gesture load) -- sees the correct size instead of
+	// briefly rendering the sprite at its raw canvas dimensions.
+	auto screen = _engine->getCurrentScreen();
+	_animation->scale(screen ? screen->getZScale(_pos.y) : 1);
 	_phase = 0;
 	_frames = _animation->frames();
 	_jokes = jokes;
