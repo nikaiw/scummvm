@@ -355,7 +355,8 @@ void WeaponItems::equipItem(int itemIndex) {
 Common::String WeaponItems::getFullDescription(int itemIndex, int displayNum) {
 	XeenItem &i = operator[](itemIndex);
 	Common::String desc;
-	if (Common::RU_RUS == g_vm->getLanguage())
+	// Russian and French both order item names as name-then-material
+	if (g_vm->getLanguage() == Common::RU_RUS || g_vm->getLanguage() == Common::FR_FRA)
 		desc = Common::String::format("\f%02u%s%s\f%02u%s%s%s%s", displayNum,
 			i._state._broken ? Res.ITEM_BROKEN : "",
 			i._state._cursed ? Res.ITEM_CURSED : "",
@@ -540,7 +541,8 @@ Common::String ArmorItems::getFullDescription(int itemIndex, int displayNum) {
 	XeenItem &i = operator[](itemIndex);
 	Common::String desc;
 
-	if (Common::RU_RUS == g_vm->getLanguage())
+	// Russian and French both order item names as name-then-material
+	if (g_vm->getLanguage() == Common::RU_RUS || g_vm->getLanguage() == Common::FR_FRA)
 		desc = Common::String::format("\f%02u%s%s\f%02u%s%s%s", displayNum,
 			i._state._broken ? Res.ITEM_BROKEN : "",
 			i._state._cursed ? Res.ITEM_CURSED : "",
@@ -671,7 +673,8 @@ Common::String AccessoryItems::getFullDescription(int itemIndex, int displayNum)
 	XeenItem &i = operator[](itemIndex);
 	Common::String desc;
 
-	if (Common::RU_RUS == g_vm->getLanguage())
+	// Russian and French both order item names as name-then-material
+	if (g_vm->getLanguage() == Common::RU_RUS || g_vm->getLanguage() == Common::FR_FRA)
 		desc = Common::String::format("\f%02u%s%s\f%02u%s%s%s", displayNum,
 			i._state._broken ? Res.ITEM_BROKEN : "",
 			i._state._cursed ? Res.ITEM_CURSED : "",
