@@ -154,7 +154,10 @@ byte SoundDriverMT32::noteMap(byte note) {
 }
 
 void SoundDriverMT32::pausePostProcess() {
-	if (_field180 && ((_field181 += _field180) < 0)) {
+	// The fade counter is 8-bit in the original, so commands like 223 act as
+	// negative increments and the wrapping sum periodically goes negative
+	_field181 = (int8)(_field181 + _field180);
+	if (_field180 && _field181 < 0) {
 		if (--_field182 < 0) {
 			_streams[stMUSIC]._playing = false;
 			_field180 = 0;

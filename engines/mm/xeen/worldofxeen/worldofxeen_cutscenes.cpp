@@ -88,7 +88,7 @@ bool WorldOfXeenCutscenes::worldEnding1() {
 	windows[41].writeString("\x1\xD");
 
 	screen.fadeOut();
-	while (!_vm->shouldExit() && sound.isSoundPlaying())
+	while (!_vm->shouldExit() && sound.isMusicPlaying())
 		events.pollEventsAndWait();
 
 	// And so the call went out to the people through the lands of Xeen that the
@@ -652,7 +652,7 @@ bool WorldOfXeenCutscenes::worldEnding3() {
 	}
 
 	screen.fadeOut();
-	while (sound.isSoundPlaying()) {
+	while (sound.isMusicPlaying()) {
 		WAIT(2);
 	}
 
