@@ -1609,7 +1609,7 @@ bool DarkSideCutscenes::showDarkSideEnding4() {
 		SpriteResource("scc28.end"), SpriteResource("scd28.end"),
 		SpriteResource("sce28.end"), SpriteResource("scf28.end"),
 		SpriteResource("scg28.end"), SpriteResource("sch28.end"),
-		SpriteResource("sci28.end"), SpriteResource("sck28.end"),
+		SpriteResource("sci28.end"), SpriteResource("scj28.end"),
 		SpriteResource("sck28.end")
 	};
 
