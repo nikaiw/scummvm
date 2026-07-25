@@ -695,7 +695,7 @@ bool CloudsCutscenes::showCloudsEnding2() {
 	savedBg.blitFrom(screen);
 
 	// Close up of King Roland
-	const int XLIST1[13] = { 0, -5, -10, -15, -20, -25, -30, -33, -27, -22, -17 };
+	const int XLIST1[13] = { 0, -5, -10, -15, -20, -25, -30, -33, -27, -22, -17, -12, -7 };
 	const int XLIST2[13] = { 160, 145, 130, 115, 100, 85, 70, 57, 53, 48, 42, 39, 34 };
 	const int YLIST[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4 };
 
