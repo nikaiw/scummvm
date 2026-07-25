@@ -125,8 +125,8 @@ bool WorldOfXeenCutscenes::worldEnding1() {
 	}
 
 	// They came in great numbers to witness the momentous occasion
-	int frame = 40, frame2 = 0;
-	for (int idx = 0, xp = 0; idx < SCREEN_WIDTH; idx += 5) {
+	int frame = 40, frame2 = 0, xp = 0;
+	for (int idx = 0; idx < SCREEN_WIDTH; idx += 5) {
 		screen.horizMerge(xp);
 		tower1.draw(0, 0, Common::Point(idx, 0), SPRFLAG_800);
 		sc3a.draw(0, frame, Common::Point(idx + 91, 86), SPRFLAG_800);
@@ -148,10 +148,14 @@ bool WorldOfXeenCutscenes::worldEnding1() {
 	}
 
 	for (; frame2 < 60; ++frame2) {
-		screen.horizMerge(frame);
+		screen.horizMerge(xp);
 		tower2.draw(0, 0, Common::Point(0, 0), SPRFLAG_800);
 		tower2.draw(0, 1, Common::Point(SCREEN_WIDTH / 2, 0), SPRFLAG_800);
 		sc3b[frame2 / 30].draw(0, frame2 % 30, Common::Point(43, 65), SPRFLAG_800);
+
+		xp -= 2;
+		if (xp < 1)
+			xp = SCREEN_WIDTH;
 
 		setSubtitle(Res.WORLD_END_TEXT[2]);
 		w0.update();
