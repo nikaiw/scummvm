@@ -770,7 +770,6 @@ bool CloudsCutscenes::showCloudsEnding3() {
 	}
 
 	// Zooming into the mirror
-	screen.freePages();
 	savedBg.create(screen.w, screen.h, screen.format);
 	savedBg.blitFrom(screen);
 
@@ -981,6 +980,7 @@ bool CloudsCutscenes::showCloudsEnding4(uint finalScore) {
 
 	doScroll(true, false);
 	screen.fadeOut();
+	screen.freePages();
 
 	return true;
 }
